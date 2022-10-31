@@ -7,7 +7,6 @@ from openpyxl.styles.numbers import BUILTIN_FORMATS
 
 #Основной прайс-лист
 def def_price_df_my(price_df):
-    price_df.drop(price_df.columns[[1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 16]], axis='columns', inplace=True) #Удаляем ненужные столбцы
     price_df.drop(labels = [0,1,2,3,4,5,6,7,8],axis = 0, inplace = True) #Удаляем ненужные строки
     price_df.reset_index(inplace=True) #Обновляем индексы
     price_df = price_df.drop('index', axis=1) #Удаляем старые индексы
@@ -22,7 +21,6 @@ def def_price_df_my(price_df):
 
 #Распродажа
 def def_price_sale(price_df_sale):
-    price_df_sale.drop(price_df_sale.columns[[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13]], axis='columns', inplace=True) #Удаляем ненужные столбцы
     price_df_sale.drop(labels = [0,1,2,3,4,5,6,7,8],axis = 0, inplace = True) #Удаляем ненужные строки
     price_df_sale.reset_index(inplace=True) #Обновляем индексы
     price_df_sale = price_df_sale.drop('index', axis=1) #Удаляем старые индексы
