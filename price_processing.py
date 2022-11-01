@@ -2,8 +2,6 @@
 
 #библиотеки
 import pandas as pd
-import openpyxl
-from openpyxl.styles.numbers import BUILTIN_FORMATS
 
 #Основной прайс-лист
 def def_price_df_my(price_df):
@@ -16,7 +14,6 @@ def def_price_df_my(price_df):
     for i in range(len(price_df)):
         roznitsa_list.append(round(price_df.iloc[i,4]*1.2+0.5, 0)) #МРЦ*1.2 +0.5 для округления в большую сторону
     price_df['Розница ЭКС'] = roznitsa_list
-    price_df['Розница ЭКС'].number_format = openpyxl.styles.numbers.BUILTIN_FORMATS[2]
     return price_df
 
 #Распродажа
@@ -36,19 +33,22 @@ def def_price_sale(price_df_sale):
 def def_price_my_to_xlsx(price_my_to_xlsx, price_public_sale_to_xlsx, todays_date, file_directory_resalts):
     name_sheets_my = {todays_date: price_my_to_xlsx, todays_date+'(Р)': price_public_sale_to_xlsx}
     writer_my = pd.ExcelWriter(file_directory_resalts+'Прайс-лист_СТ_'+todays_date+'_мой.xlsx', engine='xlsxwriter')
+    workbook_my = writer_my.book #записываем объект 'xlsxwriter' в книгу, для последующих назначений форматов
+    format1 = workbook_my.add_format({'num_format': '#,##0.00'})
+    format_art = workbook_my.add_format({'num_format': '#,##0.00'})
     for sheet_name in name_sheets_my.keys():
         name_sheets_my[sheet_name].to_excel(writer_my, sheet_name=sheet_name, index=False)
     sheet_0 = writer_my.sheets[todays_date]
     sheet_0.set_column(0, 0, 50)
-    sheet_0.set_column(1, 1, 11)
+    sheet_0.set_column('B:C', 11, format_art)
     sheet_0.set_column(2, 2, 8)
-    sheet_0.set_column('D:H', 12)
+    sheet_0.set_column('D:H', 12, format1)
 
     sheet_1 = writer_my.sheets[todays_date+'(Р)']
     sheet_1.set_column(0, 0, 50)
-    sheet_1.set_column(1, 1, 11)
+    sheet_1.set_column(1, 1, 11, format_art)
     sheet_1.set_column(2, 2, 8)
-    sheet_1.set_column('D:E', 22)
+    sheet_1.set_column('D:E', 22, format1)
     writer_my.save()
 
 #Публичный прайс-лист, выгрузка
@@ -56,17 +56,20 @@ def def_price_public_basic_to_xlsx(price_my_to_xlsx, price_public_sale_to_xlsx, 
     price_public_basic_to_xlsx = price_my_to_xlsx.drop('% скидки ЭКС', axis=1)
     name_sheets_public = {todays_date: price_public_basic_to_xlsx, 'Распродажа': price_public_sale_to_xlsx}
     writer_public = pd.ExcelWriter(file_directory_resalts+'Прайс-лист_СТ_'+todays_date+'_(с распродажей).xlsx', engine='xlsxwriter')
+    workbook_public = writer_public.book #записываем объект 'xlsxwriter' в книгу, для последующих назначений форматов
+    format1 = workbook_public.add_format({'num_format': '#,##0.00'})
+    format_art = workbook_public.add_format({'num_format': '0.'})
     for sheet_name in name_sheets_public.keys():
         name_sheets_public[sheet_name].to_excel(writer_public, sheet_name=sheet_name, index=False)
     sheet_0 = writer_public.sheets[todays_date]
     sheet_0.set_column(0, 0, 50)
-    sheet_0.set_column(1, 1, 11)
+    sheet_0.set_column(1, 1, 11, format_art)
     sheet_0.set_column(2, 2, 8)
-    sheet_0.set_column('D:G', 12)
+    sheet_0.set_column('D:G', 12, format1)
 
     sheet_1 = writer_public.sheets['Распродажа']
     sheet_1.set_column(0, 0, 50)
-    sheet_1.set_column(1, 1, 11)
+    sheet_1.set_column(1, 1, 11, format_art)
     sheet_1.set_column(2, 2, 8)
-    sheet_1.set_column('D:E', 22)
+    sheet_1.set_column('D:E', 22, format1)
     writer_public.save()    

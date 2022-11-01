@@ -1,9 +1,9 @@
 import pandas as pd
 
 def def_to_zakroma(price_my_to_xlsx, price_public_sale_to_xlsx):
-    price_to_zakroma = price_my_to_xlsx.drop(price_my_to_xlsx.columns[[5, 7]], axis='columns') #Удаляем ненужные столбцы
-    price_sale = price_public_sale_to_xlsx.drop(price_public_sale_to_xlsx.columns[[4]], axis='columns')
-    price_sale = price_sale.dropna(axis=0)
+    price_to_zakroma = price_my_to_xlsx.drop(price_my_to_xlsx.columns[[5]], axis='columns') #Удаляем ненужные столбцы , 7
+    # price_sale = price_public_sale_to_xlsx.drop(price_public_sale_to_xlsx.columns[[4]], axis='columns')
+    price_sale = price_public_sale_to_xlsx.dropna(axis=0)
     price_sale.rename(columns={'Базовый(РФ)/Вход ЭКС': 'Базовый(РФ)'}, inplace=True)
     mrc_list = []
     for i in range(len(price_sale)):

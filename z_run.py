@@ -29,13 +29,13 @@ art_dubl_df = pd.read_excel(file_directory_prices_in_vesta+file_name_art_dubl)
 #Загружаем Прайс-лист_СТ_todays_date_мой, типа Прайс-лист_СТ_2022-09-12_мой
 prices_LT = pd.read_excel(file_directory_resalts+file_name_price_LT, sheet_name=todays_date)
 #Обработка прайса функцией, выгрузка файла ценообразования для закачки в VESTA
-nomenclature_change_basic = def_pricing_basic(prices_in_vesta, art_dubl_df, prices_LT)
+nomenclature_change_basic = def_pricing_basic(prices_in_vesta, art_dubl_df, prices_LT, file_directory_prices_in_vesta, todays_date)
 nomenclature_change_basic.to_excel(file_directory_prices_in_vesta + 'Закачка Световые Технологии' + file_name_prices[7:-5] +'_basic.xlsx', sheet_name='ActualCeni', index=False)
 
 #Загружаем Прайс-лист_СТ_todays_date_мой, типа Прайс-лист_СТ_2022-09-12_мой
 prices_LT_sale = pd.read_excel(file_directory_resalts+file_name_price_LT, sheet_name=todays_date+'(Р)')
 #Обработка прайса функцией, выгрузка файла ценообразования для закачки в VESTA
-nomenclature_change_sale = def_pricing_sale(prices_in_vesta, art_dubl_df, prices_LT_sale)
+nomenclature_change_sale = def_pricing_sale(prices_in_vesta, art_dubl_df, prices_LT_sale, file_directory_prices_in_vesta, todays_date)
 nomenclature_change_sale.to_excel(file_directory_prices_in_vesta + 'Закачка Световые Технологии' + file_name_prices[7:-5] +'_sale.xlsx', sheet_name='ActualCeni', index=False)
 
 #Формируем прайс в закрома
