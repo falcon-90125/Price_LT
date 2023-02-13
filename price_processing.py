@@ -5,10 +5,16 @@ import pandas as pd
 
 #Основной прайс-лист
 def def_price_df_my(price_df):
-    price_df.drop(labels = [0,1,2,3,4,5,6,7,8],axis = 0, inplace = True) #Удаляем ненужные строки
+    price_df.drop(labels = [0,1,2,3,4,5,6,7],axis = 0, inplace = True) #Удаляем ненужные строки
     price_df.reset_index(inplace=True) #Обновляем индексы
     price_df = price_df.drop('index', axis=1) #Удаляем старые индексы
-    cols = ['Номенклатура', 'Артикул', 'Ед. изм.', 'Базовый(РФ)', 'МРЦ', '% скидки ЭКС', 'Вход ЭКС'] #Вводим наименования столбцов
+    columns = price_df.loc[0,:].tolist()
+    price_df = pd.DataFrame(price_df[1:]) #Берём прайс без шапки таблицы, записываем новый df
+    price_df.columns = columns #Назначаем шапку таблицы индексами колонок
+    cols_price_df = ['Номенклатура', 'Артикул', 'Ед. изм.', 'Цена с НДС', 'МРЦ', '% скидки клиента', 'Цена клиента с НДС'] #Определяем нужные для загрузки колонки
+    price_df = price_df[cols_price_df] #Отбираем нужные колонки, записываем новый df
+
+    cols = ['Номенклатура', 'Артикул', 'Ед. изм.', 'Базовый(РФ)', 'МРЦ', '% скидки ЭКС', 'Вход ЭКС'] #Вводим новые наименования столбцов
     price_df.columns = cols
     roznitsa_list = [] #Список для розничных цен
     for i in range(len(price_df)):
@@ -18,15 +24,22 @@ def def_price_df_my(price_df):
 
 #Распродажа
 def def_price_sale(price_df_sale):
-    price_df_sale.drop(labels = [0,1,2,3,4,5,6,7,8],axis = 0, inplace = True) #Удаляем ненужные строки
+    price_df_sale.drop(labels = [0,1,2,3,4,5,6,7],axis = 0, inplace = True) #Удаляем ненужные строки
     price_df_sale.reset_index(inplace=True) #Обновляем индексы
     price_df_sale = price_df_sale.drop('index', axis=1) #Удаляем старые индексы
-    cols = ['Номенклатура', 'Артикул', 'Ед. изм.', 'Базовый(РФ)/Вход ЭКС'] #Вводим наименования столбцов
-    price_df_sale.columns = cols
+    columns = price_df_sale.loc[0,:].tolist() #Список колонок для нового df
+    price_df_sale = pd.DataFrame(price_df_sale[1:]) #Берём прайс без шапки таблицы, записываем новый df
+    price_df_sale.columns = columns #Назначаем шапку таблицы индексами колонок
+    cols_price_df_sale = ['Номенклатура', 'Артикул', 'Ед. изм.', 'Цена с НДС'] #Определяем нужные для загрузки колонки
+    price_df_sale = price_df_sale[cols_price_df_sale] #Отбираем нужные колонки, записываем новый df
+
+    cols_sale = ['Номенклатура', 'Артикул', 'Ед. изм.', 'Базовый(РФ)/Вход ЭКС'] #Вводим наименования столбцов
+    price_df_sale.columns = cols_sale
     roznitsa_list_sale = []
     for i in range(len(price_df_sale)):
         roznitsa_list_sale.append(round(price_df_sale.iloc[i,3]* 1.5+0.5, 0)) #'Базовый(РФ)/Вход ЭКС'*1.5 +0.5 для округления в большую сторону
-    price_df_sale['Розница ЭКС'] = roznitsa_list_sale    
+    price_df_sale['Розница ЭКС'] = roznitsa_list_sale
+
     return price_df_sale
 
 #Мой прайс-лист, выгрузка
