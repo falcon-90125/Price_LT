@@ -22,13 +22,13 @@ prices_in_vesta = pd.read_excel(file_directory_input+file_name_prices, usecols=c
 #Загружаем файл дублей
 art_dubl_df = pd.read_excel(file_directory_input+file_name_art_dubl)
 #Загружаем базовый Прайс-лист_СТ_todays_date_мой, типа Прайс-лист_СТ_2022-09-12_мой
-prices_LT = pd.read_excel(file_directory_output+file_name_price_LT, sheet_name=todays_date)
+price_LT = pd.read_excel(file_directory_output+file_name_price_LT, sheet_name=todays_date)
 #Загружаем распродажный Прайс-лист_СТ_todays_date_мой, типа Прайс-лист_СТ_2022-09-12_мой
-prices_LT_sale = pd.read_excel(file_directory_output+file_name_price_LT, sheet_name=todays_date+'(Р)')
+price_LT_sale = pd.read_excel(file_directory_output+file_name_price_LT, sheet_name=todays_date+'(Р)')
 #Обработка базового прайса функцией, выгрузка файла ценообразования базового прайса для загрузки в VESTA
-def_pricing_basic(prices_in_vesta, art_dubl_df, prices_LT, file_directory_output)
+def_pricing_basic(prices_in_vesta, art_dubl_df, price_LT, file_directory_output)
 #Обработка распродажного прайса функцией, выгрузка файла ценообразования прайса распродажи для загрузки в VESTA
-def_pricing_sale(prices_in_vesta, art_dubl_df, prices_LT_sale, file_directory_output)
+def_pricing_sale(prices_in_vesta, art_dubl_df, price_LT_sale, file_directory_output)
 
 #Формируем прайс в закрома
 def_to_zakroma(price_my_to_xlsx, price_public_sale_to_xlsx, file_directory_output)
