@@ -1,8 +1,9 @@
-with open('exchange\input\data_price.txt', 'r') as f:  # считываем дату прайса из файла
+file_directory_input = 'exchange/input/' #Директория для input'ов
+
+with open(file_directory_input + 'data_price.txt', 'r') as f:  # считываем дату прайса из файла
   todays_date = f.read()
   f.close()
 
-file_directory_input = 'exchange/input/' #Директория для input'ов
 file_name_basic = 'Прайс_CТ.xlsx' #Прайс Световых базовый с их сайта
 file_name_sale = 'Прайс_CТ_распродажа.xlsx' #Прайс Световых распродажный с их сайта
 file_name_prices = 'Цены_СТ_из_Весты.xlsx' #Выгрузить из карточки ценообразования по Поставщику МГК Световые Технологии ООО, код 81948

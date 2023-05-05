@@ -12,7 +12,7 @@ price_my_to_xlsx = def_price_df_my(file_directory_input, file_name_basic)
 #функция преобразования прайса СТ в "публичный прайс" и выгрузка его в директорию
 price_public_sale_to_xlsx = def_price_sale(file_directory_input, file_name_sale)
 #"мой прайс" - выгрузка его в директорию
-def_price_my_to_xlsx(price_my_to_xlsx, price_public_sale_to_xlsx, todays_date, file_directory_output)
+def_price_my_to_xlsx(price_my_to_xlsx, price_public_sale_to_xlsx, todays_date, file_directory_output, file_name_price_LT)
 #"публичный прайс" - выгрузка его в директорию
 def_price_public_basic_to_xlsx(price_my_to_xlsx, price_public_sale_to_xlsx, todays_date, file_directory_output)
 

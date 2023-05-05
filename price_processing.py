@@ -48,9 +48,9 @@ def def_price_sale(file_directory_input, file_name_sale):
     return price_df_sale
 
 #Мой прайс-лист, выгрузка
-def def_price_my_to_xlsx(price_my_to_xlsx, price_public_sale_to_xlsx, todays_date, file_directory_resalts):
+def def_price_my_to_xlsx(price_my_to_xlsx, price_public_sale_to_xlsx, todays_date, file_directory_resalts, file_name_price_LT):
     name_sheets_my = {todays_date: price_my_to_xlsx, todays_date+'(Р)': price_public_sale_to_xlsx}
-    writer_my = pd.ExcelWriter(file_directory_resalts+'Прайс-лист_СТ_'+todays_date+'_мой.xlsx', engine='xlsxwriter')
+    writer_my = pd.ExcelWriter(file_directory_resalts+file_name_price_LT, engine='xlsxwriter') #'Прайс-лист_СТ_'+todays_date+'_мой.xlsx'
     workbook_my = writer_my.book #записываем объект 'xlsxwriter' в книгу, для последующих назначений форматов
     format1 = workbook_my.add_format({'num_format': '#,##0.00'})
     format_art = workbook_my.add_format({'num_format': '#,##0.00'})
@@ -67,7 +67,7 @@ def def_price_my_to_xlsx(price_my_to_xlsx, price_public_sale_to_xlsx, todays_dat
     sheet_1.set_column(1, 1, 11, format_art)
     sheet_1.set_column(2, 2, 8)
     sheet_1.set_column('D:E', 22, format1)
-    writer_my.save()
+    writer_my._save()
 
 #Публичный прайс-лист, выгрузка
 def def_price_public_basic_to_xlsx(price_my_to_xlsx, price_public_sale_to_xlsx, todays_date, file_directory_resalts):
@@ -90,7 +90,7 @@ def def_price_public_basic_to_xlsx(price_my_to_xlsx, price_public_sale_to_xlsx, 
     sheet_1.set_column(1, 1, 11, format_art)
     sheet_1.set_column(2, 2, 8)
     sheet_1.set_column('D:E', 22, format1)
-    writer_public.save()
+    writer_public._save()
 
 #Формируем прайс в закрома
 def def_to_zakroma(price_my_to_xlsx, price_public_sale_to_xlsx, file_directory_output):
