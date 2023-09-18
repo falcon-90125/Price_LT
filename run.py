@@ -31,4 +31,4 @@ def_pricing_basic(prices_in_vesta, art_dubl_df, price_LT, file_directory_output)
 def_pricing_sale(prices_in_vesta, art_dubl_df, price_LT_sale, file_directory_output)
 
 #Формируем прайс в закрома
-def_to_zakroma(price_my_to_xlsx, price_public_sale_to_xlsx, file_directory_output)
+def_to_zakroma(price_my_to_xlsx, price_public_sale_to_xlsx, file_directory_output, todays_date)

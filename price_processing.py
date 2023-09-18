@@ -33,13 +33,14 @@ def def_price_sale(file_directory_input, file_name_sale):
     price_df_sale.reset_index(inplace=True) #Обновляем индексы
     price_df_sale = price_df_sale.drop('index', axis=1) #Удаляем старые индексы
     columns = price_df_sale.loc[0,:].tolist() #Список колонок для нового df
+    #Переименовываем 1й столбец 'Цена с НДС' в 'Базовый(РФ)/Вход ЭКС', т.к. их два с одинаковым названием и значениями и загружаются оба, нужен только один
+    columns[columns.index('Цена с НДС', columns.index('Цена с НДС'))] = 'Базовый(РФ)/Вход ЭКС'
     price_df_sale = pd.DataFrame(price_df_sale[1:]) #Берём прайс без шапки таблицы, записываем новый df
-    price_df_sale.columns = columns #Назначаем шапку таблицы индексами колонок
-    cols_price_df_sale = ['Номенклатура', 'Артикул', 'Ед. изм.', 'Цена с НДС'] #Определяем нужные для загрузки колонки
-    price_df_sale = price_df_sale[cols_price_df_sale] #Отбираем нужные колонки, записываем новый df
+    price_df_sale.columns = columns #Назначаем шапку таблицы с индексами колонок
+    price_df_sale = price_df_sale[['Номенклатура', 'Артикул', 'Ед. изм.', 'Базовый(РФ)/Вход ЭКС']] #Отбираем нужные колонки, записываем новый df
 
-    cols_sale = ['Номенклатура', 'Артикул', 'Ед. изм.', 'Базовый(РФ)/Вход ЭКС'] #Вводим наименования столбцов
-    price_df_sale.columns = cols_sale
+    # cols_sale = ['Номенклатура', 'Артикул', 'Ед. изм.', 'Базовый(РФ)/Вход ЭКС'] #Вводим наименования столбцов
+    # price_df_sale.columns = cols_sale
     roznitsa_list_sale = []
     for i in range(len(price_df_sale)):
         roznitsa_list_sale.append(round(price_df_sale.iloc[i,3]* 1.5+0.5, 0)) #'Базовый(РФ)/Вход ЭКС'*1.5 +0.5 для округления в большую сторону
@@ -92,17 +93,13 @@ def def_price_public_basic_to_xlsx(price_my_to_xlsx, price_public_sale_to_xlsx, 
     sheet_1.set_column('D:E', 22, format1)
     writer_public._save()
 
-#Формируем прайс в закрома
-def def_to_zakroma(price_my_to_xlsx, price_public_sale_to_xlsx, file_directory_output):
-    price_to_zakroma = price_my_to_xlsx.drop(price_my_to_xlsx.columns[[5, 7]], axis='columns') #Удаляем ненужные столбцы
-    price_sale = price_public_sale_to_xlsx.drop(price_public_sale_to_xlsx.columns[[4]], axis='columns')
+#Прайс в закрома
+def def_to_zakroma(price_my_to_xlsx, price_public_sale_to_xlsx, file_directory_output, todays_date):
+    price_to_zakroma = price_my_to_xlsx.drop(price_my_to_xlsx.columns[[5]], axis='columns')
     price_sale = price_public_sale_to_xlsx.dropna(axis=0)
     price_sale.rename(columns={'Базовый(РФ)/Вход ЭКС': 'Базовый(РФ)'}, inplace=True)
-    mrc_list = []
-    for i in range(len(price_sale)):
-        mrc_list.append(round(price_sale.iloc[i,3]*1.15+0.5, 0)) #МРЦ*1.2 +0.5 для округления в большую сторону    
-    price_sale['МРЦ'] = mrc_list
+    price_sale['МРЦ'] = price_sale['Базовый(РФ)'].apply(lambda x: round(x * 1.15 + 0.5, 0))
     price_sale['Вход ЭКС'] = price_sale['Базовый(РФ)']
-    price_to_zakroma = pd.concat([price_to_zakroma,price_sale])
-    price_to_zakroma.drop('Розница ЭКС', axis=1, inplace=True) #Удаляем столбец 'Розница ЭКС' за ненадобностью
-    price_to_zakroma.to_excel(file_directory_output + 'Прайс Световые технологии с распродажей - в закрома.xlsx', index=False)
+    price_sale = price_sale[['Номенклатура', 'Артикул', 'Ед. изм.', 'Базовый(РФ)', 'МРЦ', 'Вход ЭКС', 'Розница ЭКС']]
+    price_to_zakroma = pd.concat([price_to_zakroma, price_sale])
+    price_to_zakroma.to_excel(file_directory_output + 'Прайс Световые технологии с распродажей - в закрома_'+ todays_date +'.xlsx', index=False)
