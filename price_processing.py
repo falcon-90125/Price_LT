@@ -3,13 +3,19 @@
 #библиотеки
 import pandas as pd
 
-#Основной прайс-лист
+# from config import todays_date, file_directory_input, file_directory_output, file_name_basic, file_name_sale, file_name_prices, file_name_price_LT, \
+#      file_name_art_dubl, cols_in_vesta
+
+# Основной прайс-лист
 def def_price_df_my(file_directory_input, file_name_basic):
     price_df = pd.read_excel(file_directory_input+file_name_basic) #Прайс Световых базовый с их сайта
-    price_df.drop(labels = [0,1,2,3,4,5,6,7],axis = 0, inplace = True) #Удаляем ненужные строки
+    price_df.drop(labels = [0,1,2,3,4,5,6,7],axis = 0, inplace = True) #Удаляем ненужные строки 
     price_df.reset_index(inplace=True) #Обновляем индексы
     price_df = price_df.drop('index', axis=1) #Удаляем старые индексы
     columns = price_df.loc[0,:].tolist() #Список имён столбцов для формирования нового df без лишних пустых столбцов
+    columns[0] = 'Номенклатура'
+    columns[13] = 'Артикул'
+    columns[16] = 'Ед. изм.'
     #Переименовываем второй столбец 'Цена с НДС', который явл-ся МРЦ, в 'МРЦ'
     columns[columns.index('Цена с НДС', columns.index('Цена с НДС')+1)] = 'МРЦ'
     price_df = pd.DataFrame(price_df[1:]) #Берём прайс без шапки таблицы, записываем новый df
@@ -33,6 +39,9 @@ def def_price_sale(file_directory_input, file_name_sale):
     price_df_sale.reset_index(inplace=True) #Обновляем индексы
     price_df_sale = price_df_sale.drop('index', axis=1) #Удаляем старые индексы
     columns = price_df_sale.loc[0,:].tolist() #Список колонок для нового df
+    columns[0] = 'Номенклатура'
+    columns[13] = 'Артикул'
+    columns[16] = 'Ед. изм.'
     #Переименовываем 1й столбец 'Цена с НДС' в 'Базовый(РФ)/Вход ЭКС', т.к. их два с одинаковым названием и значениями и загружаются оба, нужен только один
     columns[columns.index('Цена с НДС', columns.index('Цена с НДС'))] = 'Базовый(РФ)/Вход ЭКС'
     price_df_sale = pd.DataFrame(price_df_sale[1:]) #Берём прайс без шапки таблицы, записываем новый df
