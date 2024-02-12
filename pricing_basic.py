@@ -14,7 +14,7 @@ def def_pricing_basic(prices_in_vesta, art_dubl_df, prices_LT, file_directory_ou
     prices_LT_merge_art_dubl.drop('Артикул', axis=1, inplace=True) #Удаляем столбец 'Артикул' по прайсу
 
     #Перемещаем столбец 'Артикул_дубль' туда же как в прайс-листе
-    prices_LT_art_dubl = prices_LT_merge_art_dubl[['Номенклатура','Артикул_дубль','Ед. изм.','Базовый(РФ)','МРЦ','% скидки ЭКС', 'Вход ЭКС', 'Розница ЭКС']]
+    prices_LT_art_dubl = prices_LT_merge_art_dubl[['Наименование','Артикул_дубль','Ед. изм.','Базовый (РФ)','МРЦ','Скидка ЭКС', 'Вход ЭКС', 'Розница ЭКС']]
     prices_LT_art_dubl.rename(columns={'Артикул_дубль': 'Артикул'}, inplace=True) # переименовываем столбец'Артикул_дубль' на 'Артикул'
     prices_LT_concat = pd.concat([prices_LT, prices_LT_art_dubl]) # Объединяем прайс-лист и фрагмент прайса с Артикулами-дублями
     prices_LT_concat.reset_index(inplace=True) # Обновляем индексы
@@ -63,7 +63,7 @@ def def_pricing_basic(prices_in_vesta, art_dubl_df, prices_LT, file_directory_ou
     if len(nomenclature_change) > 0:
         nomenclature_change_to_excel = nomenclature_change.iloc[:, [0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13]] #Формируем новый df без '% скидки ЭКС' и 'change'
         #Назначаем новый порядок столбцов
-        columns_nomenclature_change_to_excel=['Код', 'Номенклатура', 'Артикул', 'Ед. изм.', 'Базовый(РФ)', 'ТарифПост валюта.', 'МРЦ', 'МРЦ база', 'Вход ЭКС', 'Актуальная для транзитов', 'Розница ЭКС', 'Розница']
+        columns_nomenclature_change_to_excel=['Код', 'Наименование', 'Артикул', 'Ед. изм.', 'Базовый (РФ)', 'ТарифПост валюта.', 'МРЦ', 'МРЦ база', 'Вход ЭКС', 'Актуальная для транзитов', 'Розница ЭКС', 'Розница']
         nomenclature_change_to_excel = nomenclature_change_to_excel.reindex(columns=columns_nomenclature_change_to_excel)
         #Сортируем по 'Код'
         nomenclature_change_to_excel = nomenclature_change_to_excel.sort_values('Код')
@@ -71,7 +71,7 @@ def def_pricing_basic(prices_in_vesta, art_dubl_df, prices_LT, file_directory_ou
         nomenclature_change_to_excel.to_excel(file_directory_output + 'Oтчёт по изменениям базовый.xlsx', index=False)
 
     #Формируем файл ценообразования и выгружаем в output
-    nomenclature_change.rename(columns={'Код': 'IDNomenkl', 'Базовый(РФ)': 'Cena', '% скидки ЭКС': 'ProcentSkidki'}, inplace=True) # переименовываем столбцы для загрузочного файла
+    nomenclature_change.rename(columns={'Код': 'IDNomenkl', 'Базовый (РФ)': 'Cena', 'Скидка ЭКС': 'ProcentSkidki'}, inplace=True) # переименовываем столбцы для загрузочного файла
     nomenclature_change['TorgNacen'] = (nomenclature_change.loc[:, 'Розница ЭКС'] / nomenclature_change.loc[:, 'Вход ЭКС']-1)*100
     nomenclature_change['ProcentMinNacen'] = round((1-nomenclature_change['МРЦ'] / nomenclature_change['Cena'])*100, 5)
     nomenclature_change['Transport'] = 0

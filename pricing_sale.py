@@ -14,7 +14,7 @@ def def_pricing_sale(prices_in_vesta, art_dubl_df, prices_LT_sale, file_director
     prices_LT_merge_art_dubl.drop('Артикул', axis=1, inplace=True) #Удаляем столбец 'Артикул' по прайсу
 
     # Перемещаем столбец 'Артикул_дубль' туда же как в прайс-листе
-    prices_LT_art_dubl = prices_LT_merge_art_dubl[['Номенклатура','Артикул_дубль','Ед. изм.','Базовый(РФ)/Вход ЭКС', 'Розница ЭКС']]
+    prices_LT_art_dubl = prices_LT_merge_art_dubl[['Наименование','Артикул_дубль','Ед. изм.','Базовый(РФ)/Вход ЭКС', 'Розница ЭКС']]
     prices_LT_art_dubl.rename(columns={'Артикул_дубль': 'Артикул'}, inplace=True) # переименовываем стодбец'Артикул_дубль' на 'Артикул'
     prices_LT_concat = pd.concat([prices_LT_sale, prices_LT_art_dubl]) # Объединяем прайс-лист и фрагмент прайса с Артикулами-дублями
     prices_LT_concat.reset_index(inplace=True) # Обновляем индексы
@@ -61,7 +61,7 @@ def def_pricing_sale(prices_in_vesta, art_dubl_df, prices_LT_sale, file_director
     if len(nomenclature_change_sale) > 0:
         nomenclature_change_sale_to_excel = nomenclature_change_sale.iloc[:, [0, 1, 2, 3, 4, 5, 6, 7, 9]] #Формируем новый df без 'МРЦ база' и 'change'
         #Назначаем новый порядок столбцов
-        columns_nomenclature_change_sale_to_excel=['Код', 'Номенклатура', 'Артикул', 'Ед. изм.', 'Базовый(РФ)/Вход ЭКС', 'ТарифПост валюта.', 'Актуальная для транзитов', 'Розница ЭКС', 'Розница']
+        columns_nomenclature_change_sale_to_excel=['Код', 'Наименование', 'Артикул', 'Ед. изм.', 'Базовый(РФ)/Вход ЭКС', 'ТарифПост валюта.', 'Актуальная для транзитов', 'Розница ЭКС', 'Розница']
         nomenclature_change_sale_to_excel = nomenclature_change_sale_to_excel.reindex(columns=columns_nomenclature_change_sale_to_excel)
         #Сортируем по 'Код'
         nomenclature_change_sale_to_excel = nomenclature_change_sale_to_excel.sort_values('Код')
