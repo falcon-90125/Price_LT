@@ -2,9 +2,9 @@ import pandas as pd
 
 from config import todays_date, file_directory_input, file_directory_output, file_name_basic, \
      file_name_sale, file_name_prices, file_name_price_LT, \
-     file_name_art_dubl, cols_in_vesta
+     file_name_art_dubl, cols_in_vesta, file_name_price_to_zakroma
 from price_processing import def_price_df_my, def_price_sale
-from price_to_excele import def_price_my_to_xlsx, def_price_public_basic_to_xlsx, def_to_zakroma
+from price_to_excele import def_price_my_to_xlsx, def_price_public_basic_to_xlsx, def_to_zakroma, def_to_zakroma_dubl
 from pricing_basic import def_pricing_basic
 from pricing_sale import def_pricing_sale
 
@@ -33,4 +33,7 @@ def_pricing_basic(prices_in_vesta, art_dubl_df, price_LT, file_directory_output)
 def_pricing_sale(prices_in_vesta, art_dubl_df, price_LT_sale, file_directory_output)
 
 #Формируем прайс в закрома
-def_to_zakroma(price_my_to_xlsx, price_public_sale_to_xlsx, file_directory_output, todays_date)
+def_to_zakroma(price_my_to_xlsx, price_public_sale_to_xlsx, file_name_price_to_zakroma, file_directory_output, todays_date)
+
+#Добавляем в прайс в закрома дубли
+def_to_zakroma_dubl(file_directory_input, file_name_art_dubl, file_directory_output, file_name_price_to_zakroma, todays_date)

@@ -49,7 +49,7 @@ def def_price_public_basic_to_xlsx(price_my_to_xlsx, price_public_sale_to_xlsx, 
     writer_public._save()
 
 #Прайс в закрома
-def def_to_zakroma(price_my_to_xlsx, price_public_sale_to_xlsx, file_directory_output, todays_date):
+def def_to_zakroma(price_my_to_xlsx, price_public_sale_to_xlsx, file_name_price_to_zakroma, file_directory_output, todays_date):
     price_to_zakroma = price_my_to_xlsx.drop(price_my_to_xlsx.columns[[5]], axis='columns')
     price_sale = price_public_sale_to_xlsx.dropna(axis=0)
     price_sale.rename(columns={'Базовый(РФ)/Вход ЭКС': 'Базовый (РФ)'}, inplace=True)
@@ -57,4 +57,17 @@ def def_to_zakroma(price_my_to_xlsx, price_public_sale_to_xlsx, file_directory_o
     price_sale['Вход ЭКС'] = price_sale['Базовый (РФ)']
     price_sale = price_sale[['Наименование', 'Артикул', 'Ед. изм.', 'Базовый (РФ)', 'МРЦ', 'Вход ЭКС', 'Розница ЭКС']]
     price_to_zakroma = pd.concat([price_to_zakroma, price_sale])
-    price_to_zakroma.to_excel(file_directory_output + 'Прайс Световые технологии с распродажей - в закрома_'+ todays_date +'.xlsx', index=False)
+    price_to_zakroma.to_excel(file_directory_output + file_name_price_to_zakroma + todays_date +'.xlsx', index=False)
+
+    #Прайс в закрома с дублями
+def def_to_zakroma_dubl(file_directory_input, file_name_art_dubl, file_directory_output, file_name_price_to_zakroma, todays_date):
+    price_to_zakroma = pd.read_excel(file_directory_output+file_name_price_to_zakroma+todays_date +'.xlsx')
+    art_dubl_df = pd.read_excel(file_directory_input+file_name_art_dubl)
+    art_dubl_merge_df = art_dubl_df.merge(price_to_zakroma, on='Артикул', how='left')
+    art_dubl_merge_df = art_dubl_merge_df.dropna()
+    art_dubl_merge_df = art_dubl_merge_df.drop('Артикул', axis=1)
+    art_dubl_merge_df.rename(columns={'Артикул_дубль': 'Артикул'}, inplace=True)
+    art_dubl_merge_df = art_dubl_merge_df.reindex(columns=['Наименование', 'Артикул', 'Ед. изм.', 'Базовый (РФ)', 'МРЦ', 'Вход ЭКС', 'Розница ЭКС'])
+    price_to_zakroma = pd.concat([price_to_zakroma, art_dubl_merge_df])
+
+    price_to_zakroma.to_excel(file_directory_output + file_name_price_to_zakroma + todays_date +'.xlsx', index=False)
