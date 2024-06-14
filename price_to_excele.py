@@ -23,7 +23,8 @@ def def_price_my_to_xlsx(price_my_to_xlsx, price_public_sale_to_xlsx, todays_dat
     sheet_1.set_column(1, 1, 11, format_art)
     sheet_1.set_column(2, 2, 8)
     sheet_1.set_column('D:E', 22, format1)
-    writer_my._save()
+    # writer_my._save()
+    writer_my.save()
 
 #Публичный прайс-лист, выгрузка
 def def_price_public_basic_to_xlsx(price_my_to_xlsx, price_public_sale_to_xlsx, todays_date, file_directory_resalts):
@@ -46,7 +47,8 @@ def def_price_public_basic_to_xlsx(price_my_to_xlsx, price_public_sale_to_xlsx, 
     sheet_1.set_column(1, 1, 11, format_art)
     sheet_1.set_column(2, 2, 8)
     sheet_1.set_column('D:E', 22, format1)
-    writer_public._save()
+    # writer_public._save()
+    writer_public.save()
 
 #Прайс в закрома
 def def_to_zakroma(price_my_to_xlsx, price_public_sale_to_xlsx, file_name_price_to_zakroma, file_directory_output, todays_date):

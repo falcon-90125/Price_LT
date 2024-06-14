@@ -6,14 +6,17 @@ import pandas as pd
 # Основной прайс-лист
 def def_price_df_my(file_directory_input, file_name_basic):
     price_df = pd.read_excel(file_directory_input+file_name_basic) #Прайс Световых базовый с их сайта
-    price_df.drop(labels = [0,1,2,3,4,5,6],axis = 0, inplace = True) #Удаляем ненужные строки 
+    index_drop_str = price_df.index[price_df['Unnamed: 0'] == 'Номенклатура'].tolist()
+    price_df = price_df.iloc[index_drop_str[0]:]
     price_df.reset_index(inplace=True) #Обновляем индексы
     price_df = price_df.drop('index', axis=1) #Удаляем старые индексы
     columns = price_df.loc[0,:].tolist() #Список имён столбцов для формирования нового df без лишних пустых столбцов
-    columns[columns.index('Наименование для печати УПД')] = 'Наименование'
-    columns[columns.index('РОЦ1')+1] = 'МРЦ'
-    columns[columns.index('Закупка дистрибьютора')] = 'Скидка ЭКС'
-    columns[columns.index('Скидка ЭКС')+1] = 'Вход ЭКС'
+    indices = [index for index, fruit in enumerate(columns) if fruit == 'Цена с НДС']
+    columns[columns.index('Наименование для печати в УПД')] = 'Наименование'
+    columns[indices[0]] = 'Базовый (РФ)'
+    columns[columns.index('% скидки клиента')] = 'Скидка ЭКС'
+    columns[indices[1]] = 'МРЦ'
+    columns[columns.index('Цена клиента с НДС')] = 'Вход ЭКС'
 
     # #Переименовываем второй столбец 'Цена с НДС', который явл-ся МРЦ, в 'МРЦ'
     # columns[columns.index('Цена с НДС', columns.index('Цена с НДС')+1)] = 'МРЦ'
@@ -22,6 +25,7 @@ def def_price_df_my(file_directory_input, file_name_basic):
     #Определяем нужные для загрузки столбцы
     price_df = price_df[['Наименование', 'Артикул', 'Ед. изм.', 'Базовый (РФ)', 'МРЦ', 'Скидка ЭКС', 'Вход ЭКС']] #Записываем новый df с нужными столбцами
     price_df.drop(labels = [0, 1], axis = 0, inplace = True) #Удаляем ненужные строки 
+    price_df.dropna(axis=0, how='all', inplace=True)
     price_df.reset_index(inplace=True) #Обновляем индексы
     price_df = price_df.drop('index', axis=1) #Удаляем старые индексы
 
@@ -34,17 +38,20 @@ def def_price_df_my(file_directory_input, file_name_basic):
 # Распродажа прайс-лист
 def def_price_sale(file_directory_input, file_name_sale):
     price_df_sale = pd.read_excel(file_directory_input+file_name_sale) #Прайс Световых распродажа с их сайта
-    price_df_sale.drop(labels = [0,1,2,3,4,5,6],axis = 0, inplace = True) #Удаляем ненужные строки
+    index_drop_str = price_df_sale.index[price_df_sale['Unnamed: 0'] == 'Номенклатура'].tolist()
+    price_df_sale = price_df_sale.iloc[index_drop_str[0]:]
+    # price_df_sale.drop(labels = [0,1,2,3,4,5,6],axis = 0, inplace = True) #Удаляем ненужные строки
     price_df_sale.reset_index(inplace=True) #Обновляем индексы
     price_df_sale = price_df_sale.drop('index', axis=1) #Удаляем старые индексы
     columns = price_df_sale.loc[0,:].tolist() #Список колонок для нового df
-    columns[columns.index('Наименование для печати УПД')] = 'Наименование'
-    columns[columns.index('Базовый (РФ) распродажа')] = 'Базовый(РФ)/Вход ЭКС'
+    columns[columns.index('Наименование для печати в УПД')] = 'Наименование'
+    columns[columns.index('Цена с НДС')] = 'Базовый(РФ)/Вход ЭКС'
 
     price_df_sale.columns = columns #Назначаем шапку таблицы с индексами колонок
     price_df_sale = price_df_sale[['Наименование', 'Артикул', 'Ед. изм.', 'Базовый(РФ)/Вход ЭКС']] #Отбираем нужные колонки, записываем новый df
 
     price_df_sale.drop(labels = [0, 1], axis = 0, inplace = True) #Удаляем ненужные строки 
+    price_df_sale.dropna(axis=0, how='all', inplace=True)
     price_df_sale.reset_index(inplace=True) #Обновляем индексы
     price_df_sale = price_df_sale.drop('index', axis=1) #Удаляем старые индексы
 
