@@ -11,15 +11,10 @@ def def_price_df_my(file_directory_input, file_name_basic):
     price_df.reset_index(inplace=True) #Обновляем индексы
     price_df = price_df.drop('index', axis=1) #Удаляем старые индексы
     columns = price_df.loc[0,:].tolist() #Список имён столбцов для формирования нового df без лишних пустых столбцов
-    indices = [index for index, fruit in enumerate(columns) if fruit == 'Цена с НДС']
-    columns[columns.index('Наименование для печати в УПД')] = 'Наименование'
-    columns[indices[0]] = 'Базовый (РФ)'
-    columns[columns.index('% скидки клиента')] = 'Скидка ЭКС'
-    columns[indices[1]] = 'МРЦ'
-    columns[columns.index('Цена клиента с НДС')] = 'Вход ЭКС'
-
-    # #Переименовываем второй столбец 'Цена с НДС', который явл-ся МРЦ, в 'МРЦ'
-    # columns[columns.index('Цена с НДС', columns.index('Цена с НДС')+1)] = 'МРЦ'
+    columns[columns.index('Наименование для печати УПД')] = 'Наименование'
+    columns[columns.index('РОЦ1')+1] = 'МРЦ'
+    columns[columns.index('Закупка дистрибьютора')] = 'Скидка ЭКС'
+    columns[columns.index('Скидка ЭКС')+1] = 'Вход ЭКС'
     price_df.columns = columns #Назначаем шапку таблицы индексами столбцов
 
     #Определяем нужные для загрузки столбцы
@@ -44,8 +39,8 @@ def def_price_sale(file_directory_input, file_name_sale):
     price_df_sale.reset_index(inplace=True) #Обновляем индексы
     price_df_sale = price_df_sale.drop('index', axis=1) #Удаляем старые индексы
     columns = price_df_sale.loc[0,:].tolist() #Список колонок для нового df
-    columns[columns.index('Наименование для печати в УПД')] = 'Наименование'
-    columns[columns.index('Цена с НДС')] = 'Базовый(РФ)/Вход ЭКС'
+    columns[columns.index('Наименование для печати УПД')] = 'Наименование'
+    columns[columns.index('Базовый (РФ) распродажа')] = 'Базовый(РФ)/Вход ЭКС'
 
     price_df_sale.columns = columns #Назначаем шапку таблицы с индексами колонок
     price_df_sale = price_df_sale[['Наименование', 'Артикул', 'Ед. изм.', 'Базовый(РФ)/Вход ЭКС']] #Отбираем нужные колонки, записываем новый df
