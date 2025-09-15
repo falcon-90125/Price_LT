@@ -13,12 +13,14 @@ def def_price_my_to_xlsx(price_my_to_xlsx, price_public_sale_to_xlsx, todays_dat
     for sheet_name in name_sheets_my.keys():
         name_sheets_my[sheet_name].to_excel(writer_my, sheet_name=sheet_name, index=False)
     sheet_0 = writer_my.sheets[todays_date]
+    sheet_0.freeze_panes(1, 0)  # Закрепляем первую строку
     sheet_0.set_column(0, 0, 50)
     sheet_0.set_column('B:C', 11, format_art)
     sheet_0.set_column(2, 2, 8)
     sheet_0.set_column('D:H', 12, format1)
 
     sheet_1 = writer_my.sheets[todays_date+'(Р)']
+    sheet_1.freeze_panes(1, 0)  # Закрепляем первую строку
     sheet_1.set_column(0, 0, 50)
     sheet_1.set_column(1, 1, 11, format_art)
     sheet_1.set_column(2, 2, 8)
